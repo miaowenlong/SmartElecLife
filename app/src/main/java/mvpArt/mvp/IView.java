@@ -10,7 +10,7 @@ public interface IView {
     //隐藏加载
     void hideLoading();
     //显示信息
-    void showMessage();
+    void showMessage(String message);
     //处理消息
-    void handleMessage();
+    void handleMessage(Message message);
 }
