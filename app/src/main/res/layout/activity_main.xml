@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.sgcc.smarteleclife.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        />
 
-</RelativeLayout>
+    <include layout="@layout/head_toolbar"/>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/lin_main"/>
+
+        <include layout="@layout/lin_menu"/>
+    </android.support.v4.widget.DrawerLayout>
+</LinearLayout>

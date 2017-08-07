@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SmartElecLife</string>
+    <string name="demo">演示</string>
+    <string name="share">分享</string>
+    <string name="close">关</string>
+    <string name="open">开</string>
 </resources>
