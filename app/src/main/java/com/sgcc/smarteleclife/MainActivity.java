@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -40,19 +39,19 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
     TabWidget mTabs;
     @BindView(R.id.main_tabhost)
     FragmentTabHost mMainTabhost;
-    @BindView(R.id.iv_headicon)
-    ImageView mCivHeadicon;
-    @BindView(R.id.lv_menu)
-    ListView mLvMenu;
-    @BindView(R.id.drawer_exit_tv)
-    TextView mDrawerExitTv;
-
     ActionBarDrawerToggle mToggle;
     @BindView(R.id.drawer_main)
     DrawerLayout mDrawerMain;
 
     @Override
     protected void initData() {
+        setupDrawer();
+
+        initBottomTab();
+
+    }
+
+    private void setupDrawer() {
         setSupportActionBar(mToolbar);
         //设置返回键可用
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -60,12 +59,9 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         //设置标题文字不可显示
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mToggle = new ActionBarDrawerToggle(this,mDrawerMain,mToolbar,R.string.open,R.string.close);
+        mToggle = new ActionBarDrawerToggle(this,mDrawerMain,mToolbar, R.string.open,R.string.close);
         mDrawerMain.addDrawerListener(mToggle);
         mToggle.syncState();
-
-        initBottomTab();
-
     }
 
     private void initBottomTab() {

@@ -44,7 +44,7 @@ public class TabHomeFragment extends BaseFragment implements IView{
 
     @Override
     protected View initView(LayoutInflater inflater, ViewGroup container) {
-        return inflater.inflate(R.layout.fragment_tab_home,container);
+        return inflater.inflate(R.layout.fragment_tab_home,container,false);
     }
 
     @Override
