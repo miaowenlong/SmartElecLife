@@ -12,6 +12,8 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import mvpArt.RxUtil.RxBus;
 import mvpArt.mvp.Ipresenter;
 
 /**
@@ -23,6 +25,7 @@ public abstract class BaseActivity<P extends Ipresenter> extends RxAppCompatActi
     private Unbinder mUnbinder;
     protected P mPresenter;
     protected CompositeDisposable mCompositeDisposable;
+    private Disposable mRxSubscribe;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,7 +34,16 @@ public abstract class BaseActivity<P extends Ipresenter> extends RxAppCompatActi
         setContentView(initView());
         //绑定到butterknife
         mUnbinder = ButterKnife.bind(this);
+        mCompositeDisposable = new CompositeDisposable();
         initData();
+        mRxSubscribe = RxBus.getInstance().tObservable(String.class)
+                .subscribe(new Consumer<String>() {
+                    @Override
+                    public void accept(String s) throws Exception {
+                        if(s.equals("关闭app"))
+                            finish();
+                    }
+                });
     }
 
     @Override
@@ -47,6 +59,7 @@ public abstract class BaseActivity<P extends Ipresenter> extends RxAppCompatActi
         super.onDestroy();
         if (mPresenter != null) mPresenter.onDestroy();
         if (mUnbinder != Unbinder.EMPTY) mUnbinder.unbind();
+        mRxSubscribe.dispose();
         this.mPresenter = null;
         this.mUnbinder = null;
     }

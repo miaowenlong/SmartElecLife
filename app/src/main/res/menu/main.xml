@@ -2,19 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/favorite"
-        android:icon="@mipmap/ic_launcher"
-        android:title="收藏"/>
+        android:id="@+id/home"
+        android:icon="@mipmap/left_menu_home"
+        android:title="电力户号"/>
     <item
-        android:id="@+id/wallet"
-        android:icon="@mipmap/ic_launcher"
-        android:title="钱包"/>
+        android:id="@+id/scene"
+        android:icon="@mipmap/left_menu_scene"
+        android:title="场景控制"/>
     <item
-        android:id="@+id/photo"
-        android:icon="@mipmap/ic_launcher"
-        android:title="相册"/>
+        android:id="@+id/terminal"
+        android:icon="@mipmap/left_menu_terminal"
+        android:title="智电终端"/>
     <item
-        android:id="@+id/file"
-        android:icon="@mipmap/ic_launcher"
-        android:title="文件"/>
+        android:id="@+id/rank"
+        android:icon="@mipmap/left_menu_rank"
+        android:title="积分排行"/>
+    <item
+        android:id="@+id/push"
+        android:icon="@mipmap/left_menu_push"
+        android:title="推送消息"/>
+    <item
+        android:id="@+id/bill"
+        android:icon="@mipmap/left_menu_push"
+        android:title="个性化账单"/>
+
 </menu>

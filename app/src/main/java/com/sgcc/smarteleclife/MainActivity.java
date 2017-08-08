@@ -18,7 +18,9 @@ import com.sgcc.smarteleclife.Fragments.TabHomeFragment;
 import com.sgcc.smarteleclife.Presenter.MainPresenter;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import mvpArt.Base.BaseActivity;
+import mvpArt.RxUtil.RxBus;
 import mvpArt.mvp.IView;
 import mvpArt.mvp.Message;
 
@@ -49,6 +51,61 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
         initBottomTab();
 
+
+    }
+
+
+    @Override
+    protected int initView() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected MainPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    public void showLoading() {
+        mPbMain.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideLoading() {
+        mPbMain.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showMessage(String message) {
+
+    }
+
+    @Override
+    public void handleMessage(Message message) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mPbMain.getVisibility() == View.VISIBLE) {
+            mPbMain.setVisibility(View.GONE);
+            return;
+        }
+        RxBus.getInstance().post("关闭app");
+    }
+
+    //设置底部的tab内容
+    private View getIndicatorView(String name, int id) {
+        View v = getLayoutInflater().inflate(R.layout.tab_indicator, null);
+        TextView textView = (TextView) v.findViewById(R.id.tabText);
+        textView.setText(name);
+        int[] drawables = {R.drawable.tab_home,
+                R.drawable.tab_energy,
+                R.drawable.tab_camera,
+                R.drawable.tab_demand};
+        ImageView imageView = (ImageView) v.findViewById(R.id.tabImg);
+        imageView.setImageResource(drawables[id]);
+        return v;
     }
 
     private void setupDrawer() {
@@ -59,7 +116,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         //设置标题文字不可显示
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        mToggle = new ActionBarDrawerToggle(this,mDrawerMain,mToolbar, R.string.open,R.string.close);
+        mToggle = new ActionBarDrawerToggle(this, mDrawerMain, mToolbar, R.string.open, R.string.close);
         mDrawerMain.addDrawerListener(mToggle);
         mToggle.syncState();
     }
@@ -82,49 +139,11 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
                 , TabDemandFragment.class, null);
     }
 
-    @Override
-    protected int initView() {
-        return R.layout.activity_main;
-    }
 
-    @Override
-    protected MainPresenter getPresenter() {
-        return null;
-    }
 
-    @Override
-    public void showLoading() {
+
+    @OnClick(R.id.header_right_tv)
+    public void onViewClicked() {
 
     }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
-    @Override
-    public void handleMessage(Message message) {
-
-    }
-
-    //设置底部的tab内容
-    private View getIndicatorView(String name, int id) {
-        View v = getLayoutInflater().inflate(R.layout.tab_indicator, null);
-        TextView textView = (TextView) v.findViewById(R.id.tabText);
-        textView.setText(name);
-        int[] drawables = {R.drawable.tab_home,
-                R.drawable.tab_energy,
-                R.drawable.tab_camera,
-                R.drawable.tab_demand};
-        ImageView imageView = (ImageView) v.findViewById(R.id.tabImg);
-        imageView.setImageResource(drawables[id]);
-        return v;
-    }
-
-
 }
