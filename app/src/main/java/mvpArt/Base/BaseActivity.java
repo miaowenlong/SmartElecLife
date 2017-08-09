@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.sgcc.smarteleclife.R;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import butterknife.ButterKnife;
@@ -27,15 +31,31 @@ public abstract class BaseActivity<P extends Ipresenter> extends RxAppCompatActi
     protected CompositeDisposable mCompositeDisposable;
     private Disposable mRxSubscribe;
 
+    ProgressBar mProgressBar;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPresenter = getPresenter();
         setContentView(initView());
+        //设置toolbar
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            //设置返回键可用
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            //设置标题文字不可显示
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        }
         //绑定到butterknife
         mUnbinder = ButterKnife.bind(this);
-        mCompositeDisposable = new CompositeDisposable();
+
         initData();
+
+        mCompositeDisposable = new CompositeDisposable();
         mRxSubscribe = RxBus.getInstance().tObservable(String.class)
                 .subscribe(new Consumer<String>() {
                     @Override
@@ -84,5 +104,19 @@ public abstract class BaseActivity<P extends Ipresenter> extends RxAppCompatActi
     }
 
 
+    public void showLoading() {
+        if (mProgressBar != null) mProgressBar.setVisibility(View.VISIBLE);
+    }
+    public void hideLoading() {
+        if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
+            mProgressBar.setVisibility(View.GONE);
+            return;
+        }
+        super.onBackPressed();
+    }
 }

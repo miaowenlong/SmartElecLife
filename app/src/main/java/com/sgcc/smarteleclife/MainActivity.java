@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
@@ -27,16 +26,13 @@ import mvpArt.mvp.Message;
 public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
 
-    @BindView(R.id.header_title)
-    TextView mHeaderTitle;
     @BindView(R.id.header_right_tv)
     TextView mHeaderRightTv;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.main_content)
     FrameLayout mMainContent;
-    @BindView(R.id.pb_main)
-    ProgressBar mPbMain;
+
     @BindView(R.id.tabs)
     TabWidget mTabs;
     @BindView(R.id.main_tabhost)
@@ -65,15 +61,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         return null;
     }
 
-    @Override
-    public void showLoading() {
-        mPbMain.setVisibility(View.VISIBLE);
-    }
 
-    @Override
-    public void hideLoading() {
-        mPbMain.setVisibility(View.GONE);
-    }
 
     @Override
     public void showMessage(String message) {
@@ -87,10 +75,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
     @Override
     public void onBackPressed() {
-        if (mPbMain.getVisibility() == View.VISIBLE) {
-            mPbMain.setVisibility(View.GONE);
-            return;
-        }
+
         RxBus.getInstance().post("关闭app");
     }
 
@@ -109,13 +94,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
     }
 
     private void setupDrawer() {
-        setSupportActionBar(mToolbar);
-        //设置返回键可用
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        //设置标题文字不可显示
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-
         mToggle = new ActionBarDrawerToggle(this, mDrawerMain, mToolbar, R.string.open, R.string.close);
         mDrawerMain.addDrawerListener(mToggle);
         mToggle.syncState();

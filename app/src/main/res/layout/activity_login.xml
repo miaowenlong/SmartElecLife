@@ -1,46 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-                android:background="@color/lightBlue">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <TextView
-        android:layout_marginTop="50dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="40sp"
-        android:text="WELCOME"
-        />
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="80dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="手机号/账号">
 
-        <AutoCompleteTextView
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/login_bck"
+        android:orientation="vertical">
+        <include layout="@layout/head_toolbar"/>
+
+
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="WELCOME"
+            android:textSize="40sp"
+            />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="密码">
-
-        <AutoCompleteTextView
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/userName_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </android.support.design.widget.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/rect_white_bck"
+            android:hint="手机号/账号"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            app:counterMaxLength="11">
 
-    <Button
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
+            <AutoCompleteTextView
+                android:id="@+id/edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/no_bck"
+                android:maxLength="11"
+                android:imeActionId="@+id/edit_pwd"
+                android:imeOptions="actionNext"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/rect_white_bck"
+            android:hint="密码"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp">
+
+            <EditText
+                android:id="@+id/edit_pwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/no_bck"
+                android:imeActionId="@+id/edit_name"
+                android:imeOptions="actionDone"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/ripple_holo_blue_bck"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:text="登录"
+            android:textSize="16sp"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/register"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:text="立即注册"/>
+
+            <TextView
+                android:id="@+id/forget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="忘记密码"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressbar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="登录"
-        android:textSize="16sp"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"/>
-</LinearLayout>
+        android:layout_gravity="center"
+        android:visibility="gone"/>
+</FrameLayout>
