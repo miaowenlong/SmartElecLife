@@ -25,7 +25,7 @@ public class BasePresenter implements Ipresenter {
     @Override
     public void onDestroy() {
         unSubscribe();
-        this.mCompositeDisposable.clear();
+
     }
 
 

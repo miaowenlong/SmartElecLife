@@ -1,16 +1,25 @@
 package com.sgcc.smarteleclife.Activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.sgcc.greendao.gen.UserDao;
 import com.sgcc.smarteleclife.Constants;
+import com.sgcc.smarteleclife.Http.models.ReturnDto;
 import com.sgcc.smarteleclife.MainActivity;
+import com.sgcc.smarteleclife.MyApp;
 import com.sgcc.smarteleclife.R;
+import com.sgcc.smarteleclife.models.User;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -21,6 +30,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import mvpArt.Http.ServiceManager;
 import mvpArt.RxUtil.RxBus;
 
 /**
@@ -44,7 +54,9 @@ public class SplashActivity extends AppCompatActivity {
         mSplashIv.animate().alpha(1).setDuration(1500).start();
 
         mCompositeDisposable = new CompositeDisposable();
-        countTime();
+        //countTime();
+        User user = readDataFromDb();
+        attemptLogin(user);
         mRxSubscribe = RxBus.getInstance().tObservable(String.class)
                 .subscribe(new Consumer<String>() {
                     @Override
@@ -54,6 +66,40 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
         mCompositeDisposable.add(mRxSubscribe);
+    }
+
+    private void attemptLogin(User user) {
+        Map<String,String> map = new HashMap();
+        map.put("userName", user.getPhoneNum());
+        map.put("loginType", "pt");
+        map.put("password", user.getPwdSecret());
+        map.put("phoneType", "1");
+        TelephonyManager mTelephonyMgr = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        map.put("imei", mTelephonyMgr.getDeviceId());
+        // 系统版本:Version
+        map.put("version", android.os.Build.VERSION.RELEASE);
+        ServiceManager.getInstance().request(1003, map).subscribe(new Consumer<ReturnDto>() {
+            @Override
+            public void accept(ReturnDto returnDto) throws Exception {
+                Intent intent = new Intent();
+                if (returnDto.getReturnFlag()==0) {
+                    intent.setClass(SplashActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }else{
+                    intent.setClass(SplashActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+    }
+
+    private User readDataFromDb() {
+        UserDao userDao = MyApp.daoSession.getUserDao();
+        List<User> users = userDao.loadAll();
+        if (users != null && users.size() > 0) {
+            return users.get(users.size() - 1);
+        }
+        return null;
     }
 
     private void countTime() {
