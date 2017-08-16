@@ -16,6 +16,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by miao_wenlong on 2017/8/15.
@@ -35,17 +36,17 @@ public class ServiceManager {
                             HttpLoggingInterceptor.Level.BODY : HttpLoggingInterceptor.Level.NONE))
             .build();
     private Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
+            .baseUrl(Constants.BASE__URL)
             .client(client)
+//            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
     private Http mHttp = retrofit.create(Http.class);
 
-    public Http getHttp() {
-        return mHttp;
-    }
+
 
     public Observable<ReturnDto> request(int requestCode, Map map){
         RequestDto requestDto = new RequestDto();
@@ -53,7 +54,7 @@ public class ServiceManager {
         requestDto.setRequestCode(requestCode);
         requestDto.setObj(oJson);
         String data = new Gson().toJson(requestDto);
-        return getHttp().http(data).subscribeOn(Schedulers.io());
+        return mHttp.http(data).subscribeOn(Schedulers.io());
     }
 }
 

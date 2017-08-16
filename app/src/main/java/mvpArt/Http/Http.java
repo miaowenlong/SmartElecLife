@@ -10,6 +10,6 @@ import retrofit2.http.Query;
  * Created by miao_wenlong on 2017/8/15.
  */
 interface Http {
-    @POST
+    @POST("a/mobileApi")
     Observable<ReturnDto> http(@Query("data") String data);
 }

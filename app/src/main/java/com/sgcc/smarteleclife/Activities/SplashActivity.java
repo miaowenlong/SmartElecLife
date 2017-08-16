@@ -56,7 +56,9 @@ public class SplashActivity extends AppCompatActivity {
         mCompositeDisposable = new CompositeDisposable();
         //countTime();
         User user = readDataFromDb();
-        attemptLogin(user);
+//        if(user != null) attemptLogin(user);
+        if (user == null) countTime();
+            else attemptLogin(user);
         mRxSubscribe = RxBus.getInstance().tObservable(String.class)
                 .subscribe(new Consumer<String>() {
                     @Override
@@ -78,17 +80,19 @@ public class SplashActivity extends AppCompatActivity {
         map.put("imei", mTelephonyMgr.getDeviceId());
         // 系统版本:Version
         map.put("version", android.os.Build.VERSION.RELEASE);
-        ServiceManager.getInstance().request(1003, map).subscribe(new Consumer<ReturnDto>() {
+        ServiceManager.getInstance().request(1003, map)
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReturnDto>() {
             @Override
             public void accept(ReturnDto returnDto) throws Exception {
                 Intent intent = new Intent();
-                if (returnDto.getReturnFlag()==0) {
+
+                /*if (returnDto.getReturnFlag()==0) {
                     intent.setClass(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{
                     intent.setClass(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
-                }
+                }*/
             }
         });
     }
@@ -108,7 +112,7 @@ public class SplashActivity extends AppCompatActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                         startActivity(intent);
                     }
                 });
@@ -118,7 +122,7 @@ public class SplashActivity extends AppCompatActivity {
 
     @OnClick(R.id.splash_timer_tv)
     public void onViewClicked() {
-        mSubscribe.dispose();
+        mCompositeDisposable.clear();
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
     }

@@ -98,7 +98,8 @@ public class LoginActivity extends BaseActivity<LoginPresenter> implements IView
                 break;
             case R.id.btn_login:
                 showLoading();
-                Observable.timer(2000, TimeUnit.MILLISECONDS).flatMap(new Function<Long, ObservableSource<Long>>() {
+                Observable.timer(2000, TimeUnit.MILLISECONDS).compose(this.<Long>bindToLifecycle()).
+                        flatMap(new Function<Long, ObservableSource<Long>>() {
                     @Override
                     public ObservableSource<Long> apply(@NonNull Long aLong) throws Exception {
                         User user = new User();
