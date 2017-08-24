@@ -1,5 +1,6 @@
 package com.sgcc.smarteleclife.Activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.sgcc.smarteleclife.MainActivity;
 import com.sgcc.smarteleclife.MyApp;
 import com.sgcc.smarteleclife.R;
 import com.sgcc.smarteleclife.models.User;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +46,7 @@ public class SplashActivity extends AppCompatActivity {
     TextView mSplashTimerTv;
     private Disposable mSubscribe,mRxSubscribe;
     private CompositeDisposable mCompositeDisposable;
-
+    private RxPermissions mRxPermissions;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +55,10 @@ public class SplashActivity extends AppCompatActivity {
         mSplashIv.setAlpha(0.2f);
         mSplashIv.animate().alpha(1).setDuration(1500).start();
 
+
         mCompositeDisposable = new CompositeDisposable();
         //countTime();
-        User user = readDataFromDb();
-//        if(user != null) attemptLogin(user);
-        if (user == null) countTime();
-            else attemptLogin(user);
+
         mRxSubscribe = RxBus.getInstance().tObservable(String.class)
                 .subscribe(new Consumer<String>() {
                     @Override
@@ -68,7 +68,24 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
         mCompositeDisposable.add(mRxSubscribe);
+
+        mRxPermissions = new RxPermissions(this);
+        mRxPermissions.request(Manifest.permission.READ_PHONE_STATE)
+                .subscribe(new Consumer<Boolean>() {
+                    @Override
+                    public void accept(Boolean granted) throws Exception {
+                        if (granted){
+                            User user = readDataFromDb();
+                            if (user == null) countTime();
+                                else attemptLogin(user);
+                        }else{
+                            countTime();
+                        }
+                    }
+                });
+
     }
+
 
     private void attemptLogin(User user) {
         Map<String,String> map = new HashMap();
@@ -86,13 +103,13 @@ public class SplashActivity extends AppCompatActivity {
             public void accept(ReturnDto returnDto) throws Exception {
                 Intent intent = new Intent();
 
-                /*if (returnDto.getReturnFlag()==0) {
+                if (returnDto.returnFlag.equals("0")) {
                     intent.setClass(SplashActivity.this, MainActivity.class);
                     startActivity(intent);
                 }else{
                     intent.setClass(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
-                }*/
+                }
             }
         });
     }
@@ -132,4 +149,5 @@ public class SplashActivity extends AppCompatActivity {
         super.onDestroy();
         mCompositeDisposable.clear();
     }
+
 }

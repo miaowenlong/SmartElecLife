@@ -32,7 +32,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
     protected CompositeDisposable mCompositeDisposable;
     private Disposable mRxSubscribe;
 
-    ProgressBar mProgressBar;
+    public ProgressBar mProgressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
