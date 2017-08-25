@@ -55,8 +55,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         setupDrawer();
 
         initBottomTab();
-
-
     }
 
 
@@ -70,12 +68,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         return null;
     }
 
-
-
-    @Override
-    public void showMessage(String message) {
-
-    }
 
     @Override
     public void handleMessage(Message message) {
@@ -125,8 +117,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         mMainTabhost.addTab(mMainTabhost.newTabSpec("4").setIndicator(indicator)
                 , TabDemandFragment.class, null);
     }
-
-
 
 
     @OnClick(R.id.header_right_tv)

@@ -18,10 +18,7 @@ import mvpArt.mvp.Message;
 public class TabHomeFragment extends BaseFragment implements IView{
 
 
-    @Override
-    public void showMessage(String message) {
 
-    }
 
     @Override
     public void handleMessage(Message message) {

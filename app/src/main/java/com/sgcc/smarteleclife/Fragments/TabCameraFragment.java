@@ -19,10 +19,7 @@ public class TabCameraFragment extends BaseFragment implements IView{
 
 
 
-    @Override
-    public void showMessage(String message) {
 
-    }
 
     @Override
     public void handleMessage(Message message) {

@@ -1,6 +1,7 @@
 package mvpArt.Base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -104,11 +105,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
     }
 
     //显示toast
-    protected void showToast(String msg) {
+    public void showToast(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 
-    protected void showToast(@StringRes int res) {
+    public void showToast(@StringRes int res) {
         Toast.makeText(this, res, Toast.LENGTH_SHORT).show();
     }
 
@@ -121,6 +122,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
     }
 
+    public<T extends Activity> void gotoNextActivity(Class<T> klass){
+        startActivity(new Intent(this,klass));
+    }
     public Activity getThis() {
         return this;
     }

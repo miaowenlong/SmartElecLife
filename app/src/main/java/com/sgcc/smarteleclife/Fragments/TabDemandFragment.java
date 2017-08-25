@@ -17,10 +17,7 @@ import mvpArt.mvp.Message;
 
 public class TabDemandFragment extends BaseFragment implements IView{
 
-    @Override
-    public void showMessage(String message) {
 
-    }
 
     @Override
     public void handleMessage(Message message) {

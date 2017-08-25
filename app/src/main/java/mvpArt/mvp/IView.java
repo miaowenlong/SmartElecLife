@@ -6,8 +6,7 @@ package mvpArt.mvp;
 
 public interface IView {
 
-    //显示信息
-    void showMessage(String message);
+
     //处理消息
     void handleMessage(Message message);
 }
