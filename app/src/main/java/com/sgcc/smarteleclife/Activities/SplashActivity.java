@@ -44,7 +44,7 @@ public class SplashActivity extends AppCompatActivity {
     ImageView mSplashIv;
     @BindView(R.id.splash_timer_tv)
     TextView mSplashTimerTv;
-    private Disposable mSubscribe,mRxSubscribe;
+    private Disposable mSubscribe;
     private CompositeDisposable mCompositeDisposable;
     private RxPermissions mRxPermissions;
     @Override
@@ -55,11 +55,10 @@ public class SplashActivity extends AppCompatActivity {
         mSplashIv.setAlpha(0.2f);
         mSplashIv.animate().alpha(1).setDuration(1500).start();
 
-
         mCompositeDisposable = new CompositeDisposable();
         //countTime();
 
-        mRxSubscribe = RxBus.getInstance().tObservable(String.class)
+        RxBus.getInstance().tObservable(String.class)
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
@@ -67,7 +66,6 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-        mCompositeDisposable.add(mRxSubscribe);
 
         mRxPermissions = new RxPermissions(this);
         mRxPermissions.request(Manifest.permission.READ_PHONE_STATE)
@@ -97,7 +95,7 @@ public class SplashActivity extends AppCompatActivity {
         map.put("imei", mTelephonyMgr.getDeviceId());
         // 系统版本:Version
         map.put("version", android.os.Build.VERSION.RELEASE);
-        ServiceManager.getInstance().request(1003, map)
+        mCompositeDisposable.add(ServiceManager.getInstance().request(1003, map)
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<ReturnDto>() {
             @Override
             public void accept(ReturnDto returnDto) throws Exception {
@@ -111,7 +109,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
-        });
+        }));
     }
 
     private User readDataFromDb() {

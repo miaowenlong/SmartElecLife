@@ -5,11 +5,16 @@
               android:layout_height="match_parent">
 
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/btn_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="fragment_home"
-        android:layout_gravity="center"
-        android:gravity="center"/>
+        android:text="单个播放器"/>
+
+    <android.support.v7.widget.RecyclerView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </LinearLayout>

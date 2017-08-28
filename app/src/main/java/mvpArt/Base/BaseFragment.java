@@ -1,5 +1,7 @@
 package mvpArt.Base;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.CheckResult;
@@ -185,5 +187,9 @@ public abstract class BaseFragment<P extends Ipresenter> extends Fragment implem
      */
     public void setData() {
 
+    }
+
+    public<T extends Activity> void gotoNextActivity(Class<T> klass){
+        startActivity(new Intent(getActivity(), klass));
     }
 }

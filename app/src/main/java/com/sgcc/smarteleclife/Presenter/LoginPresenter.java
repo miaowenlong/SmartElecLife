@@ -77,7 +77,7 @@ public class LoginPresenter extends BasePresenter {
             user.setPwdSecret(CommonUtil.md5(pwd));
             userDao.insert(user);
         } else {
-            user0.setPwdSecret(CommonUtil.md5(pwd));
+            user0.setPwdSecret(pwd);
             userDao.update(user0);
         }
     }
