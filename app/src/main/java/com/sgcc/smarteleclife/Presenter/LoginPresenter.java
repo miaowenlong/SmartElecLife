@@ -12,7 +12,6 @@ import java.util.Map;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import mvpArt.Http.ServiceManager;
-import mvpArt.Utils.CommonUtil;
 import mvpArt.mvp.BasePresenter;
 import mvpArt.mvp.Message;
 
@@ -70,14 +69,23 @@ public class LoginPresenter extends BasePresenter {
         User user0 = userDao.queryBuilder()
                 .where(UserDao.Properties.PhoneNum.eq(name))
                 .build().unique();
+        User userPre = userDao.queryBuilder()
+                .where(UserDao.Properties.Logined.eq(true))
+                .build().unique();
+        if (userPre != null) {
+            userPre.setLogined(false);
+            userDao.update(userPre);
+        }
         if (user0 == null) {
             User user = new User();
             user.setId(null);
             user.setPhoneNum(name);
-            user.setPwdSecret(CommonUtil.md5(pwd));
+            user.setPwdSecret(pwd);
+            user.setLogined(true);
             userDao.insert(user);
         } else {
             user0.setPwdSecret(pwd);
+            user0.setLogined(true);
             userDao.update(user0);
         }
     }

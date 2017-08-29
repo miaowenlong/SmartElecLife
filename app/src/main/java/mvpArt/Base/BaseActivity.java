@@ -9,6 +9,7 @@ import android.support.annotation.StringRes;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sgcc.smarteleclife.R;
@@ -34,6 +35,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
     private Disposable mRxSubscribe;
 
     public ProgressBar mProgressBar;
+    private TextView mTitle;
+    private TextView mRightBtn;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +48,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         //设置toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar);
+        mTitle = (TextView) findViewById(R.id.header_title);
+        mRightBtn = (TextView) findViewById(R.id.header_right_tv);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
             //设置返回键可用
@@ -122,6 +127,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends RxAppCompatA
         if (mProgressBar != null) mProgressBar.setVisibility(View.GONE);
     }
 
+    public void setTitle(String title){
+        mTitle.setText(title);
+    }
     public<T extends Activity> void gotoNextActivity(Class<T> klass){
         startActivity(new Intent(this,klass));
     }

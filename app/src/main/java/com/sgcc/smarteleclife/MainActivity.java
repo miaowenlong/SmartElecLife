@@ -1,25 +1,28 @@
 package com.sgcc.smarteleclife;
 
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TabWidget;
 import android.widget.TextView;
 
+import com.sgcc.greendao.gen.UserDao;
+import com.sgcc.smarteleclife.Activities.LoginActivity;
 import com.sgcc.smarteleclife.Fragments.TabCameraFragment;
 import com.sgcc.smarteleclife.Fragments.TabDemandFragment;
 import com.sgcc.smarteleclife.Fragments.TabEnergyFragment;
 import com.sgcc.smarteleclife.Fragments.TabHomeFragment;
 import com.sgcc.smarteleclife.Presenter.MainPresenter;
-import com.sgcc.smarteleclife.models.User;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.functions.Consumer;
 import mvpArt.Base.BaseActivity;
 import mvpArt.RxUtil.RxBus;
 import mvpArt.mvp.IView;
@@ -42,19 +45,30 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
     ActionBarDrawerToggle mToggle;
     @BindView(R.id.drawer_main)
     DrawerLayout mDrawerMain;
+    @BindView(R.id.navigation_view)
+    NavigationView mNavigationView;
 
     @Override
     protected void initData() {
-        addDisposable(RxBus.getInstance().tObservable(User.class).subscribe(new Consumer<User>() {
-            @Override
-            public void accept(User user) throws Exception {
-                showToast(user.getName());
-
-            }
-        }));
+        setTitle("视频播放");
         setupDrawer();
-
+        initNavigationView();
         initBottomTab();
+    }
+
+    private void initNavigationView() {
+        View view = mNavigationView.getHeaderView(0);
+        TextView drawerName = (TextView) view.findViewById(R.id.drawer_name);
+        drawerName.setText(MyApp.daoSession.getUserDao().queryBuilder()
+                .where(UserDao.Properties.Logined.eq(true))
+                .build().unique().getPhoneNum());
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                showToast(item.getTitle().toString());
+                return true;
+            }
+        });
     }
 
 
@@ -65,7 +79,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
     @Override
     protected MainPresenter getPresenter() {
-        return null;
+        return new MainPresenter();
     }
 
 
@@ -76,7 +90,6 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
     @Override
     public void onBackPressed() {
-
         RxBus.getInstance().post("关闭app");
     }
 
@@ -98,6 +111,8 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
         mToggle = new ActionBarDrawerToggle(this, mDrawerMain, mToolbar, R.string.open, R.string.close);
         mDrawerMain.addDrawerListener(mToggle);
         mToggle.syncState();
+
+
     }
 
     private void initBottomTab() {
@@ -119,12 +134,17 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
     }
 
 
-    @OnClick(R.id.header_right_tv)
-    public void onViewClicked() {
-        User user = new User();
-        user.setSex("男");
-        user.setName("缪文龙");
-        user.setAreaCode(3307);
-        RxBus.getInstance().post(user);
+    @OnClick({R.id.header_right_tv, R.id.drawer_exit_tv})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.header_right_tv:
+                mPresenter.share(Message.obtain(this,""));
+                break;
+            case R.id.drawer_exit_tv:
+                gotoNextActivity(LoginActivity.class);
+                finish();
+                break;
+        }
     }
+
 }

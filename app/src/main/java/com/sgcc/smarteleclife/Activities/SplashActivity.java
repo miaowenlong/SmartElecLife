@@ -20,7 +20,6 @@ import com.sgcc.smarteleclife.models.User;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -114,11 +113,10 @@ public class SplashActivity extends AppCompatActivity {
 
     private User readDataFromDb() {
         UserDao userDao = MyApp.daoSession.getUserDao();
-        List<User> users = userDao.loadAll();
-        if (users != null && users.size() > 0) {
-            return users.get(users.size() - 1);
-        }
-        return null;
+        User userPre = userDao.queryBuilder()
+                .where(UserDao.Properties.Logined.eq(true))
+                .build().unique();
+        return userPre;
     }
 
     private void countTime() {

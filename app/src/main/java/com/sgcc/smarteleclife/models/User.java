@@ -16,15 +16,17 @@ public class User {
     private String name;
     private String sex;
     private int areaCode;
-    @Generated(hash = 1377107528)
+    private boolean logined;
+    @Generated(hash = 480821426)
     public User(Long id, String phoneNum, String pwdSecret, String name, String sex,
-            int areaCode) {
+            int areaCode, boolean logined) {
         this.id = id;
         this.phoneNum = phoneNum;
         this.pwdSecret = pwdSecret;
         this.name = name;
         this.sex = sex;
         this.areaCode = areaCode;
+        this.logined = logined;
     }
     @Generated(hash = 586692638)
     public User() {
@@ -67,6 +69,12 @@ public class User {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public boolean getLogined() {
+        return this.logined;
+    }
+    public void setLogined(boolean logined) {
+        this.logined = logined;
     }
 
   

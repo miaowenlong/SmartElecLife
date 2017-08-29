@@ -30,6 +30,7 @@ public class UserDao extends AbstractDao<User, Long> {
         public final static Property Name = new Property(3, String.class, "name", false, "NAME");
         public final static Property Sex = new Property(4, String.class, "sex", false, "SEX");
         public final static Property AreaCode = new Property(5, int.class, "areaCode", false, "AREA_CODE");
+        public final static Property Logined = new Property(6, boolean.class, "logined", false, "LOGINED");
     }
 
 
@@ -50,7 +51,8 @@ public class UserDao extends AbstractDao<User, Long> {
                 "\"PWD_SECRET\" TEXT," + // 2: pwdSecret
                 "\"NAME\" TEXT," + // 3: name
                 "\"SEX\" TEXT," + // 4: sex
-                "\"AREA_CODE\" INTEGER NOT NULL );"); // 5: areaCode
+                "\"AREA_CODE\" INTEGER NOT NULL ," + // 5: areaCode
+                "\"LOGINED\" INTEGER NOT NULL );"); // 6: logined
     }
 
     /** Drops the underlying database table. */
@@ -88,6 +90,7 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindString(5, sex);
         }
         stmt.bindLong(6, entity.getAreaCode());
+        stmt.bindLong(7, entity.getLogined() ? 1L: 0L);
     }
 
     @Override
@@ -119,6 +122,7 @@ public class UserDao extends AbstractDao<User, Long> {
             stmt.bindString(5, sex);
         }
         stmt.bindLong(6, entity.getAreaCode());
+        stmt.bindLong(7, entity.getLogined() ? 1L: 0L);
     }
 
     @Override
@@ -134,7 +138,8 @@ public class UserDao extends AbstractDao<User, Long> {
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // pwdSecret
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // name
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // sex
-            cursor.getInt(offset + 5) // areaCode
+            cursor.getInt(offset + 5), // areaCode
+            cursor.getShort(offset + 6) != 0 // logined
         );
         return entity;
     }
@@ -147,6 +152,7 @@ public class UserDao extends AbstractDao<User, Long> {
         entity.setName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSex(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setAreaCode(cursor.getInt(offset + 5));
+        entity.setLogined(cursor.getShort(offset + 6) != 0);
      }
     
     @Override
