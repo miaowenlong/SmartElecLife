@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity<MainPresenter> implements IView {
 
     @Override
     protected MainPresenter getPresenter() {
-        return new MainPresenter();
+        return new MainPresenter()             ;
     }
 
 
